@@ -12,9 +12,11 @@ function AJAXStart() {
 
 function renderHTML(data) {
     var dayNameArray = Object.keys(data);
-    console.log(dayNameArray);
-
     var groupNameArray = Object.keys(data.понедельник);
+    var lessonStartTimeArray = Object.keys(data.понедельник['ЭК-11']);
+    console.log(lessonStartTimeArray);
+
+
 
     var tr = document.createElement('tr');
     var th = document.createElement('th');
@@ -51,7 +53,6 @@ function renderHTML(data) {
                 td.insertAdjacentHTML('beforeend', groupData.toString());
             }
             tr.appendChild(td);
-
         }
         table.appendChild(tr);
     }

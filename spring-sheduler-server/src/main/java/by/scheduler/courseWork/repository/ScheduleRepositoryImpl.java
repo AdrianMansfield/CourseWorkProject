@@ -1,6 +1,7 @@
 package by.scheduler.courseWork.repository;
 
 import by.scheduler.courseWork.model.DayOfWeek;
+import by.scheduler.courseWork.model.LessonStartTime;
 import by.scheduler.courseWork.model.Schedule;
 import org.springframework.stereotype.Repository;
 
@@ -28,13 +29,14 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
         return query.getResultList();
     }
     @Override
-    public Map<String, Map<String, List<Schedule>>> showAll() {
+    public  Map<String, Map<String, Map<String, List<Schedule>>>> showAll() {
         List<Schedule> list = getDataFromDB();
-        Map<String, Map<String, List<Schedule>>> map = new TreeMap<>(getComparing());
+        Map<String, Map<String, Map<String, List<Schedule>>>> map = new TreeMap<>(getComparing());
         for (Schedule schedule : list) {
             map
                     .computeIfAbsent(schedule.getName(), nameOfDay -> new TreeMap<>())
-                    .computeIfAbsent(schedule.getGroupName(), groups -> new ArrayList<>())
+                    .computeIfAbsent(schedule.getGroupName(), groups -> new TreeMap<>(getComparing2()))
+                    .computeIfAbsent(schedule.getStartTime(), startTime -> new ArrayList<>())
                     .add(schedule);
         }
         return map;
@@ -43,4 +45,5 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
     private Comparator<String> getComparing() {
         return Comparator.comparing(DayOfWeek::fromString);
     }
+    private Comparator<String> getComparing2() {return Comparator.comparing(LessonStartTime::fromString);}
 }
